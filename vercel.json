@@ -1,17 +1,16 @@
 {
   "version": 2,
+  "name": "github-stat-check",
   "builds": [
     {
-      "src": "./server.js",
+      "src": "server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      // Specify which paths will route to a destination using a regex
       "src": "/(.*)",
-      // Specify the paths' destination
-      "dest": "/"
+      "dest": "/server.js"
     }
   ]
 }
