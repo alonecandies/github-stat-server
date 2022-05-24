@@ -14,14 +14,6 @@ async function getCommits(org, repoName, octokit) {
   return await octokit.request(`GET /repos/${org}/${repoName}/commits`);
 }
 
-async function getStars(org, repoName, octokit) {
-  return await octokit.request(`GET /repos/${org}/${repoName}/stargazers`);
-}
-
-async function getWatching(org, repoName, octokit) {
-  return await octokit.request(`GET /repos/${org}/${repoName}/subscribers`);
-}
-
 Stat.getTotalStat = async (authToken, org, result) => {
   const octokit = new Octokit({
     auth: authToken,
@@ -34,11 +26,9 @@ Stat.getTotalStat = async (authToken, org, result) => {
     stat.totalWatching = 0;
     for (let repo of listRepo.data) {
       const commits = await getCommits(org, repo.name, octokit);
-      const stars = await getStars(org, repo.name, octokit);
-      const watching = await getWatching(org, repo.name, octokit);
       stat.totalCommits += commits.data.length;
-      stat.totalStars += stars.data.length;
-      stat.totalWatching += watching.data.length;
+      stat.totalStars += repo.stargazers_count;
+      stat.totalWatching += repo.watchers_count;
     }
     result(null, stat);
   } catch (err) {
